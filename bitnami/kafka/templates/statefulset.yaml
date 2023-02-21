@@ -398,6 +398,10 @@ spec:
               containerPort: {{ .Values.containerPorts.client }}
             - name: kafka-internal
               containerPort: {{ .Values.containerPorts.internal }}
+            {{- if .Values.kraft.enabled }}
+            - name: kafka-kraft
+              containerPort: {{ .Values.kraft.controllerPort }}
+            {{- end }}
             {{- if .Values.externalAccess.enabled }}
             - name: kafka-external
               containerPort: {{ .Values.containerPorts.external }}
