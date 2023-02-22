@@ -188,10 +188,11 @@ spec:
               {{- if .Values.listenerSecurityProtocolMap }}
               value: {{ .Values.listenerSecurityProtocolMap | quote }}
               {{- else if .Values.externalAccess.enabled }}
-              value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }},EXTERNAL:{{ $externalClientProtocol }}"
-                {{- if .Values.kraft.enabled }}
+              {{- if .Values.kraft.enabled }}
               value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }},CONTROLLER:{{ $controllerProtocol }},EXTERNAL:{{ $externalClientProtocol }}"
-                {{- end}}
+              {{- else }}
+              value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }},EXTERNAL:{{ $externalClientProtocol }}"
+              {{- end }}
               {{- else }}
               value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }}"
                 {{- if .Values.kraft.enabled }}
@@ -208,10 +209,11 @@ spec:
               {{- if .Values.listeners }}
               value: {{ join "," .Values.listeners }}
               {{- else if .Values.externalAccess.enabled }}
-              value: "INTERNAL://:{{ .Values.containerPorts.internal }},CLIENT://:{{ .Values.containerPorts.client }},EXTERNAL://:{{ .Values.containerPorts.external }}"
-                {{- if .Values.kraft.enabled }}
+              {{- if .Values.kraft.enabled }}
               value: "INTERNAL://:{{ .Values.containerPorts.internal }},CLIENT://:{{ .Values.containerPorts.client }},CONTROLLER://:{{ .Values.kraft.controllerPort }},EXTERNAL://:{{ .Values.containerPorts.external }}"
-                {{- end }}
+              {{- else }}
+              value: "INTERNAL://:{{ .Values.containerPorts.internal }},CLIENT://:{{ .Values.containerPorts.client }},EXTERNAL://:{{ .Values.containerPorts.external }}"
+              {{- end }}
               {{- else }}
               value: "INTERNAL://:{{ .Values.containerPorts.internal }},CLIENT://:{{ .Values.containerPorts.client }}"  
                 {{- if .Values.kraft.enabled }}
