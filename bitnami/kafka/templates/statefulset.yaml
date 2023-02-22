@@ -194,10 +194,11 @@ spec:
               value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }},EXTERNAL:{{ $externalClientProtocol }}"
               {{- end }}
               {{- else }}
-              value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }}"
-                {{- if .Values.kraft.enabled }}
+              {{- if .Values.kraft.enabled }}
               value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }},CONTROLLER:{{ $controllerProtocol }}"
-                {{- end }}
+              {{- else }}
+              value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }}"
+              {{- end }}
               {{- end }}
             {{- if or ($clientProtocol | regexFind "SASL") ($externalClientProtocol | regexFind "SASL") ($interBrokerProtocol | regexFind "SASL") .Values.auth.sasl.jaas.zookeeperUser }}
             - name: KAFKA_CFG_SASL_ENABLED_MECHANISMS
@@ -215,10 +216,11 @@ spec:
               value: "INTERNAL://:{{ .Values.containerPorts.internal }},CLIENT://:{{ .Values.containerPorts.client }},EXTERNAL://:{{ .Values.containerPorts.external }}"
               {{- end }}
               {{- else }}
-              value: "INTERNAL://:{{ .Values.containerPorts.internal }},CLIENT://:{{ .Values.containerPorts.client }}"  
-                {{- if .Values.kraft.enabled }}
+              {{- if .Values.kraft.enabled }}
               value: "INTERNAL://:{{ .Values.containerPorts.internal }},CLIENT://:{{ .Values.containerPorts.client }},CONTROLLER://:{{ .Values.kraft.controllerPort }}"
-                {{- end }}
+              {{- else }}
+              value: "INTERNAL://:{{ .Values.containerPorts.internal }},CLIENT://:{{ .Values.containerPorts.client }}"  
+              {{- end }}
               {{- end }}
             {{- if .Values.externalAccess.enabled }}
             {{- if .Values.externalAccess.autoDiscovery.enabled }}
